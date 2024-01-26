@@ -268,7 +268,7 @@ impl Context {
 pub struct TargetData(LLVMTargetDataRef);
 
 #[derive(Debug)]
-pub struct Module(LLVMModuleRef);
+pub struct Module(pub LLVMModuleRef);
 
 impl Drop for Module {
     fn drop(&mut self) {

@@ -61,7 +61,7 @@ pub impl<'a> FunctionEnvExt for mm::FunctionEnv<'a> {
     /// the most bits out of the hash while using only alphanumerics.
     fn llvm_symbol_name_full(&self, tyvec: &[mty::Type]) -> String {
         let module_env = &self.module_env;
-        let module_address = module_env.self_address().to_canonical_string();
+        let module_address = module_env.self_address().to_canonical_string(false);
         let module_name = module_env
             .get_name()
             .display(module_env.symbol_pool())
@@ -226,7 +226,8 @@ pub impl SignatureTokenExt for SignatureToken {
             SignatureToken::Vector(bt) => {
                 Self::find_struct_instantiation_signatures(bt, inst_signatures);
             }
-            SignatureToken::StructInstantiation(_, args) => {
+            SignatureToken::StructInstantiation(args) => {
+                let args = &args.1;
                 // Instantiations may contain nested instantiations.
                 for arg in args {
                     Self::find_struct_instantiation_signatures(arg, inst_signatures);
@@ -263,7 +264,7 @@ fn test_symbol_name() {
             named_address_map,
         }];
 
-        run_model_builder(sources, vec![]).unwrap()
+        run_model_builder(sources, vec![], None).unwrap()
     };
 
     let fun = model
