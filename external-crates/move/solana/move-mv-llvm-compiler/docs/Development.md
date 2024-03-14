@@ -85,6 +85,9 @@ Run the tests with any of these commands:
 cargo test -p move-mv-llvm-compiler --test ir-tests
 cargo test -p move-mv-llvm-compiler --test move-ir-tests
 cargo test -p move-mv-llvm-compiler --test rbpf-tests
+
+# One can also run a specific test e.g., to test only entry-point07.move
+cargo test --profile ci -p move-mv-llvm-compiler --test rbpf-tests entry-point07.move
 ```
 
 The IR tests work by producing `.actual.ll` files and comparing them to
@@ -258,8 +261,9 @@ For example
 > RUST_LOG=info move-mv-llvm-compiler -b tests/BasicCoin.mv
 
 ----
-On MacOS, some builds and tests might spuriously fail because the tools downloaded may not be trusted by the OS. To get around that run the following command in each directory where binaries are there e.g., `move-dev/bin` and `rust/bin`
+On MacOS, some builds and tests might spuriously fail because the tools downloaded may not be trusted by the OS. You may get error message like "clang-17 can't be opened because Apple cannot check it for malicious software". To get around that run the following command in each directory where binaries are there e.g., `move-dev/bin` and `rust/bin`
 
+> cd /path/to/move-dev/bin
 > xattr -d com.apple.quarantine  *
 Note that this will not remove the attribute from symlinks. For symlinks you have to do it separately or use bash tricks like
 > for i in `find . -type l`; do echo $i; mv $i $i.tmp; done ; # rename all the symlinks to .tmp
