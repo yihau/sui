@@ -253,7 +253,7 @@ fn test_symbol_name() {
     let model = {
         let manifest_dir = env!("CARGO_MANIFEST_DIR");
         let manifest_dir = PathBuf::from(manifest_dir);
-        let move_path = "../../tools/move-mv-llvm-compiler/tests/rbpf-tests/call-local.move";
+        let move_path = "../move-mv-llvm-compiler/tests/rbpf-tests/call-local.move";
         let move_path = manifest_dir.join(move_path);
 
         let named_address_map: BTreeMap<String, _> = BTreeMap::new();
