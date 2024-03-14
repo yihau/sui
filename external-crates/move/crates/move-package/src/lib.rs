@@ -38,6 +38,60 @@ use crate::{
 };
 use move_compiler::linters::LintLevel;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[derive(clap::Parser)]
+pub enum Architecture {
+    Sui,
+    Solana,
+}
+
+impl std::fmt::Display for Architecture {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Sui => write!(f, "sui"),
+            Self::Solana => write!(f, "solana"),
+        }
+    }
+}
+
+impl Architecture {
+    fn all() -> impl Iterator<Item = Self> {
+        IntoIterator::into_iter([
+            Self::Sui,
+            #[cfg(feature = "solana-backend")]
+            Self::Solana,
+        ])
+    }
+}
+
+impl std::str::FromStr for Architecture {
+    type Err = anyhow::Error;
+
+    fn from_str(s: &str) -> Result<Self> {
+        Ok(match s {
+            "sui" => Self::Sui,
+            "solana" => Self::Solana,
+
+            _ => {
+                let supported_architectures = Self::all()
+                    .map(|arch| format!("\"{}\"", arch))
+                    .collect::<Vec<_>>();
+                let be = if supported_architectures.len() == 1 {
+                    "is"
+                } else {
+                    "are"
+                };
+                anyhow::bail!(
+                    "Unrecognized architecture {} -- only {} {} supported",
+                    s,
+                    supported_architectures.join(", "),
+                    be
+                )
+            }
+        })
+    }
+}
+
 #[derive(Debug, Parser, Clone, Serialize, Deserialize, Eq, PartialEq, PartialOrd, Default)]
 #[clap(about)]
 pub struct BuildConfig {
@@ -67,6 +121,9 @@ pub struct BuildConfig {
     /// Optional location to save the lock file to, if package resolution succeeds.
     #[clap(skip)]
     pub lock_file: Option<PathBuf>,
+
+    #[clap(long = "arch", global = true)]
+    pub architecture: Option<Architecture>,
 
     /// Only fetch dependency repos to MOVE_HOME
     #[clap(long = "fetch-deps-only", global = true)]
@@ -200,6 +257,16 @@ impl BuildConfig {
         //     build_plan.compile(writer)
         // }
         build_plan.compile(writer)
+    }
+
+    #[cfg(feature = "solana-backend")]
+    pub fn compile_package_solana<W: Write>(self, path: &Path, writer: &mut W) -> Result<()> {
+        // resolution graph diagnostics are only needed for CLI commands so ignore them by passing a
+        // vector as the writer
+        let resolved_graph = self.resolution_graph_for_package(path, &mut Vec::new())?;
+        let _mutx = PackageLock::lock();
+        let ret = BuildPlan::create(resolved_graph)?.compile_solana(writer);
+        ret
     }
 
     /// Compile the package at `path` or the containing Move package. Do not exit process on warning
