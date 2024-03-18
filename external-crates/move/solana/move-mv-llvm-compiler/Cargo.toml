@@ -37,7 +37,7 @@ move-package.workspace = true
 move-to-solana.workspace = true
 clap = { version = "3.1.8", features = ["derive"] }
 semver = "1.0.13"
-llvm-sys = "150.0.3"
+llvm-sys = "170.0.1"
 extension-trait = "1.0.1"
 num = "0.4.0"
 num-traits = "0.2"
