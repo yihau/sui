@@ -63,6 +63,16 @@ harness = false
 name = "build_testsuite"
 harness = false
 
+[[test]]
+name = "move_unit_tests_solana"
+harness = false
+required-features = ["solana-backend"]
+
+[[test]]
+name = "build_testsuite_solana"
+harness = false
+required-features = ["solana-backend"]
+
 [features]
 tiered-gas = [ "move-vm-test-utils/tiered-gas" ]
 solana-backend = ["move-package/solana-backend", "move-unit-test/solana-backend"]
