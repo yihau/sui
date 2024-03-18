@@ -16,6 +16,14 @@ fn run_test_with_modifiers(
     unit_test_config: UnitTestingConfig,
     path: &Path,
 ) -> anyhow::Result<Vec<((Vec<u8>, bool), PathBuf)>> {
+    let unit_test_config = if !cfg!(feature = "solana-backend") {
+        unit_test_config
+    } else {
+        let mut unit_test_config = unit_test_config;
+        unit_test_config.solana = true;
+        unit_test_config
+    };
+
     let mut results = Vec::new();
 
     let buffer = Vec::new();
@@ -24,10 +32,17 @@ fn run_test_with_modifiers(
         anyhow::bail!("No test plan constructed for {:?}", path);
     }
 
-    results.push((
-        unit_test_config.run_and_report_unit_tests(test_plan.unwrap(), None, None, buffer)?,
-        path.with_extension(EXP_EXT),
-    ));
+    if !cfg!(feature = "solana-backend") {
+        results.push((
+            unit_test_config.run_and_report_unit_tests(test_plan.unwrap(), None, None, buffer)?,
+            path.with_extension(EXP_EXT),
+        ));
+    } else {
+        results.push((
+            unit_test_config.run_and_report_unit_tests(test_plan.unwrap(), None, None, buffer)?,
+            path.with_extension(format!("{}.{}", "solana", EXP_EXT)),
+        ));
+    }
 
     Ok(results)
 }
