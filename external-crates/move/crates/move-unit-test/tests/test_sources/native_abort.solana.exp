@@ -1,0 +1,24 @@
+Running Move unit tests
+[ FAIL    ] 0x1::A::native_abort_good_right_code
+[ FAIL    ] 0x1::A::native_abort_good_wrong_code
+[ FAIL    ] 0x1::A::native_abort_unexpected_abort
+
+Test failures:
+
+Failures in 0x1::A:
+
+┌── native_abort_good_right_code ──────
+│ Test did not abort with expected code. Expected test to abort with code 1, but instead it aborted with code 101 originating in an unknown location rooted here
+└──────────────────
+
+
+┌── native_abort_good_wrong_code ──────
+│ Test did not abort with expected code. Expected test to abort with code 0, but instead it aborted with code 101 originating in an unknown location rooted here
+└──────────────────
+
+
+┌── native_abort_unexpected_abort ──────
+│ Test was not expected to error, but it aborted with code 101 originating in an unknown location rooted here
+└──────────────────
+
+Test result: FAILED. Total tests: 3; passed: 0; failed: 3

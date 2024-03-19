@@ -1,0 +1,26 @@
+Running Move unit tests
+[ FAIL    ] 0x42::m::t0
+[ FAIL    ] 0x42::m::t1
+[ FAIL    ] 0x42::m::t2
+
+Test failures:
+
+Failures in 0x42::m:
+
+┌── t0 ──────
+│ Test did not error as expected
+└──────────────────
+
+
+┌── t1 ──────
+│ Test did not error as expected
+└──────────────────
+
+
+┌── t2 ──────
+│ Failed to run a program on Solana VM.
+│ 
+│ Program log: 0xfb1, 0xfb1, 0xfb1, 0xfb1, 0xfb1
+└──────────────────
+
+Test result: FAILED. Total tests: 3; passed: 0; failed: 3

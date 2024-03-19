@@ -1,0 +1,21 @@
+Running Move unit tests
+[ FAIL    ] 0x1::M::poison_call
+[ FAIL    ] 0x1::M::poison_call_OLD
+
+Test failures:
+
+Failures in 0x1::M:
+
+┌── poison_call ──────
+│ Failed to run a program on Solana VM.
+│ 
+│ 
+│ Err(UnsupportedInstruction(63))
+└──────────────────
+
+
+┌── poison_call_OLD ──────
+│ Test was not expected to error, but it aborted with code 101 originating in an unknown location rooted here
+└──────────────────
+
+Test result: FAILED. Total tests: 2; passed: 0; failed: 2

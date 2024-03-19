@@ -1,0 +1,27 @@
+Command `build -v --arch solana`:
+COMPILING build_include_exclude_stdlib to SOLANA
+Move source code errors Failed to compile Move into SOLANA ERROR
+[0m[1m[38;5;9merror[0m[1m: unbound module[0m
+  [0m[34m┌─[0m sources/UseSigner.move:2:7
+  [0m[34m│[0m
+[0m[34m2[0m [0m[34m│[0m   use [0m[31mstd::signer[0m;
+  [0m[34m│[0m       [0m[31m^^^^^^^^^^^[0m [0m[31mInvalid 'use'. Unbound module: 'std::signer'[0m
+
+[0m[1m[38;5;9merror[0m[1m: unbound module[0m
+  [0m[34m┌─[0m sources/UseSigner.move:5:5
+  [0m[34m│[0m
+[0m[34m5[0m [0m[34m│[0m     [0m[31msigner[0m::address_of(account)
+  [0m[34m│[0m     [0m[31m^^^^^^[0m [0m[31mUnbound module alias 'signer'[0m
+
+[0m[1m[38;5;11mwarning[0m[1m: unused variable[0m
+  [0m[34m┌─[0m sources/UseSigner.move:4:16
+  [0m[34m│[0m
+[0m[34m4[0m [0m[34m│[0m   public fun f([0m[33maccount[0m: &signer): address {
+  [0m[34m│[0m                [0m[33m^^^^^^^[0m [0m[33mUnused parameter 'account'. Consider removing or prefixing with an underscore: '_account'[0m
+  [0m[34m│[0m
+  [0m[34m=[0m This warning can be suppressed with '#[allow(unused_variable)]' applied to the 'module' or module member ('const', 'fun', or 'struct')
+
+
+Error: Move source code errors
+Command `-d -v build --arch solana`:
+COMPILING MoveStdlib, build_include_exclude_stdlib to SOLANA
