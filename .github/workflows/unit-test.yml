@@ -1,0 +1,60 @@
+name: unit test
+
+on:
+  workflow_call:
+
+jobs:
+  main:
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+          - macos-12
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - id: acquire_solana_tools
+        shell: bash
+        run: |
+          source ./scripts/acquire_solana_tools.sh
+          echo "MOVE_DEV_PATH=$MOVE_DEV_PATH" >> $GITHUB_ENV
+          echo "PLATFORM_TOOLS_PATH=$PLATFORM_TOOLS_PATH" >> $GITHUB_ENV
+
+      - name: move-native tests
+        working-directory: ./external-crates/move
+        run: cargo test --profile ci -p move-native
+
+      - name: build move-cli
+        working-directory: ./external-crates/move
+        run: cargo build --profile ci -p move-cli --bin move --features solana-backend
+        env:
+          LLVM_SYS_170_PREFIX: ${{ env.MOVE_DEV_PATH }}
+          PLATFORM_TOOLS_ROOT: ${{ env.PLATFORM_TOOLS_PATH }}
+
+      - name: build move-ir-compiler
+        working-directory: ./external-crates/move
+        run: cargo build --profile ci -p move-ir-compiler
+
+      - name: build move-compiler
+        working-directory: ./external-crates/move
+        run: cargo build --profile ci -p move-compiler
+
+      - name: move-mv-llvm-compiler tests
+        working-directory: ./external-crates/move
+        run: |
+          cargo test --profile ci -p move-mv-llvm-compiler
+        env:
+          LLVM_SYS_170_PREFIX: ${{ env.MOVE_DEV_PATH }}
+          PLATFORM_TOOLS_ROOT: ${{ env.PLATFORM_TOOLS_PATH }}
