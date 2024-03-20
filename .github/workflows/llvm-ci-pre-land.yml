@@ -34,7 +34,7 @@ jobs:
           source ./scripts/acquire_solana_tools.sh
           echo "MOVE_DEV_PATH=$MOVE_DEV_PATH" >> $GITHUB_ENV
           echo "PLATFORM_TOOLS_PATH=$PLATFORM_TOOLS_PATH" >> $GITHUB_ENV
-          echo "MOVE_NATIVE_PATH=${{ github.workspace }}/language/move-native" >> $GITHUB_ENV
+          echo "MOVE_NATIVE_PATH=${{ github.workspace }}/external-crates/move/language/move-native" >> $GITHUB_ENV
       - name: run Solana-based move cli tests
         working-directory: ./external-crates/move
         run: "cargo test --features solana-backend -p move-cli --test build_testsuite_solana --test move_unit_tests_solana -- --test-threads 1"
@@ -64,7 +64,7 @@ jobs:
           source ./scripts/acquire_solana_tools.sh
           echo "MOVE_DEV_PATH=$MOVE_DEV_PATH" >> $GITHUB_ENV
           echo "PLATFORM_TOOLS_PATH=$PLATFORM_TOOLS_PATH" >> $GITHUB_ENV
-          echo "MOVE_NATIVE_PATH=${{ github.workspace }}/language/move-native" >> $GITHUB_ENV
+          echo "MOVE_NATIVE_PATH=${{ github.workspace }}/external-crates/move/language/move-native" >> $GITHUB_ENV
       - name: run Solana-based move stdlib tests
         working-directory: ./external-crates/move
         run: "cargo run --features solana-backend -p move-cli --bin move -- test --solana -p language/move-stdlib"
@@ -94,7 +94,7 @@ jobs:
           source ./scripts/acquire_solana_tools.sh
           echo "MOVE_DEV_PATH=$MOVE_DEV_PATH" >> $GITHUB_ENV
           echo "PLATFORM_TOOLS_PATH=$PLATFORM_TOOLS_PATH" >> $GITHUB_ENV
-          echo "MOVE_NATIVE_PATH=${{ github.workspace }}/language/move-native" >> $GITHUB_ENV
+          echo "MOVE_NATIVE_PATH=${{ github.workspace }}/external-crates/move/language/move-native" >> $GITHUB_ENV
       - name: run Solana-based move unit test framework tests
         working-directory: ./external-crates/move
         run: "cargo test --features solana-backend -p move-unit-test --test move_unit_test_testsuite -- --test-threads 1"
