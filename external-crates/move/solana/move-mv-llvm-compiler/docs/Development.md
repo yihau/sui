@@ -269,6 +269,22 @@ Note that this will not remove the attribute from symlinks. For symlinks you hav
 > for i in `find . -type l`; do echo $i; mv $i $i.tmp; done ; # rename all the symlinks to .tmp
 > for i in `ls -1 *.tmp`; do l=$(readlink $i); b=${i%.tmp}; echo $l; ln -s $l $b; done; # create new symlinks
 > rm *.tmp # remove the old ones
+
+---
+rust-analyzer settings in vscode
+
+Add these to settings.json file
+```json
+    "rust-analyzer.cargo.cfgs": {
+        "feature": "solana-backend"
+    },
+    "rust-analyzer.server.extraEnv": {
+        "LLVM_SYS_170_PREFIX":"/path/to/platform-tools-1.41/move-dev",
+        "MOVE_NATIVE_PATH":"/path/to/move/language/move-native",
+        "PLATFORM_TOOLS_ROOT":"/path/to/platform-tools-1.41"
+    },
+```
+
 ## Submission
 
 Only github pull requests are accepted. Typically contributors would fork this repo
